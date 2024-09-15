@@ -11,3 +11,4 @@ class Cube(object):
     def set_side(self, new_side):
         """Set the value of the Cube's side."""
         self.__side = abs(new_side)
+        
