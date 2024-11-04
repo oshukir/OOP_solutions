@@ -1,0 +1,59 @@
+import string
+
+class keyword_cipher:
+    def __init__(self, abc, keyword):
+        self.abc = abc
+        self.key = keyword
+        self.NORM2CAESAR, self.CAESAR2NORM = self.make_dict(keyword)
+    
+    def encode(self, plain):
+        result = "".join(self.NORM2CAESAR.get(i, i) for i in plain)
+        return result
+    
+    def decode(self, ciphered):
+        result = "".join(self.CAESAR2NORM.get(i, i) for i in ciphered)
+        return result
+    
+    def del_repeatable(self, key):
+        seen = set()
+        result = []
+        for char in key:
+            if char not in seen:
+                seen.add(char)
+                result.append(char)
+        return ''.join(result)
+    
+    def make_dict(self, key):
+        original = list(self.abc)
+        new_key = self.del_repeatable(key)
+        ciphered = list(new_key)
+        
+        for i in original:
+            if i not in ciphered:
+                ciphered.append(i)
+                
+        N2C = dict(zip(original, ciphered))
+        C2N = dict(zip(ciphered, original))
+        
+        return N2C, C2N
+    
+
+
+# GENIOUS SOLUTION
+class keyword_cipher(object):
+    def __init__(self, abc, kw):
+
+        key = ''.join(dict.fromkeys(kw+abc).keys())
+
+        self.encode = lambda s: s.translate(str.maketrans(abc, key))
+
+        self.decode = lambda s: s.translate(str.maketrans(key, abc))
+
+
+
+# abc = "abcdefghijklmnopqrstuvwxyz"
+# key = "keyword"
+# cipher = keyword_cipher(abc, key)
+
+# cipher.encode('abchij')
+# cipher.decode('keyabc')
